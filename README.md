@@ -1,2 +1,0 @@
-# hackTbilisi
-Hackathon UniHack

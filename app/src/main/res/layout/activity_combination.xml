@@ -24,7 +24,6 @@
             android:id="@+id/create_your_word_id"
             android:padding="10dp"
             android:maxLength="50"
-            android:hint="@string/text"
             android:textColor="@color/text_color"
             android:textSize="17sp"
             android:layout_width="match_parent"
