@@ -30,6 +30,7 @@ import java.util.ArrayList;
 
 import baasi.hackathon.sja.DB.CTable;
 import baasi.hackathon.sja.model.TalkHand;
+import baasi.hackathon.sja.util.MyGson;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -180,7 +181,6 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
         inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
     }
 
-
     /**
      * დავამატოთ კონტეინერ ლეიატში
      * @param resId
@@ -280,7 +280,7 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
                 idList.add((Integer) containerLayout.getChildAt(i).getTag());
             }
             values.put(CTable.WORD, word.getText().toString());
-            values.put(CTable.ACTIONS, convertListToJson(idList));
+            values.put(CTable.ACTIONS, MyGson.convertListToJson(idList));
             MainActivity.db.update(CTable.TABLE_NAME, values, "id = ?", new String[]{String.valueOf(mTalkHand.getId())});
 
             onBackPressed();
@@ -298,18 +298,10 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
 
         values = new ContentValues();
         values.put(CTable.WORD, mTalkHand.getWord());
-        values.put(CTable.ACTIONS, convertListToJson(mTalkHand.getGesturesList()));
+        values.put(CTable.ACTIONS, MyGson.convertListToJson(mTalkHand.getGesturesList()));
 
         MainActivity.db.insert(CTable.TABLE_NAME, null, values);
     }
 
-    /**
-     * გადავიყვანოთ ლისტი ჯსონ ობიექტად (სტრინგი)
-     * @param list ლისტი
-     * @return ჯსონ სტრინგი
-     */
-    private String convertListToJson(ArrayList<Integer> list){
-        Gson gson = new Gson();
-        return gson.toJson(list);
-    }
+
 }

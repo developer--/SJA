@@ -1,5 +1,6 @@
 package baasi.hackathon.sja;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,6 +24,7 @@ import baasi.hackathon.sja.DB.CTable;
 import baasi.hackathon.sja.DB.DBHelper;
 import baasi.hackathon.sja.adapters.TalkerAdapter;
 import baasi.hackathon.sja.model.TalkHand;
+import baasi.hackathon.sja.util.MyGson;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         talk_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,HelloWorldActivity.class);
+                Intent intent = new Intent(MainActivity.this, TalkActivity.class);
                 startActivity(intent);
                 MainActivity.this.overridePendingTransition(R.anim.right_in,
                         R.anim.left_out);
@@ -100,54 +102,27 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * წამოოვათრიოთ ბაზიდან
-     * @return
+     * @return list
      */
     private ArrayList<TalkHand> getData(){
-
-        Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<Integer>>() {}.getType();
 
         ArrayList<TalkHand> list = new ArrayList<>();
         TalkHand mTalkHand;
         if (db != null){
-            Cursor cursor = db.rawQuery("SELECT * FROM " + CTable.TABLE_NAME +" ORDER BY "+CTable.id + " DESC", null);
+            @SuppressLint("Recycle") Cursor cursor = db.rawQuery("SELECT * FROM " + CTable.TABLE_NAME +" ORDER BY "+CTable.id + " DESC", null);
             if (cursor.moveToFirst()){
                 do{
                     int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(String.valueOf(CTable.id))));
                     String word = cursor.getString(cursor.getColumnIndex(String.valueOf(CTable.WORD)));
                     String actions = cursor.getString(cursor.getColumnIndex(String.valueOf(CTable.ACTIONS)));
-                    mTalkHand = new TalkHand(id,word, (ArrayList<Integer>) gson.fromJson(actions,type));
+                    mTalkHand = new TalkHand(id,word, MyGson.getIntegers(actions));
                     list.add(mTalkHand);
-                    System.out.println("1123 "+list.size());
                 }while (cursor.moveToNext());
             }
         }
 
 
         return list;
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 
