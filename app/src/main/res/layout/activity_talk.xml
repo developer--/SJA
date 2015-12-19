@@ -46,7 +46,6 @@
                 android:textSize="25sp"
                 android:gravity="center_horizontal"
                 android:textColor="@color/text_color"
-                android:text="@string/help_string_res"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -71,7 +70,7 @@
                 android:layout_alignParentBottom="true"
                 android:id="@+id/talk_reset_button_id"
                 android:text="წაშლა"
-                 android:elevation="5dp"
+                android:elevation="5dp"
                 android:textSize="20sp"
                 android:background="@drawable/button_style"
                 android:textColor="@color/white"

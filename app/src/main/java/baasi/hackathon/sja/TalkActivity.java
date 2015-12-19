@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import baasi.hackathon.sja.DB.CTable;
+import baasi.hackathon.sja.animtaion.MyAnim;
 import baasi.hackathon.sja.util.MyGson;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,7 +54,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.talk_container_layout)protected LinearLayout containerLayout;
     @Bind(R.id.talk_help_text_view_id)protected TextView helpTextView;
     @Bind(R.id.talk_reset_button_id)protected Button resetButton;
-
+    @Bind(R.id.order_img_id)protected ImageView orderImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +78,8 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
         // Next, register for DeviceListener callbacks.
         hub.addListener(mListener);
+
+        MyAnim.crossFadeAnimation(helpTextView, helpTextView, 2000);
 
     }
 
