@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<TalkHand> list = new ArrayList<>();
         TalkHand mTalkHand;
         if (db != null){
-            Cursor cursor = db.rawQuery("SELECT * FROM " + CTable.TABLE_NAME , null);
+            Cursor cursor = db.rawQuery("SELECT * FROM " + CTable.TABLE_NAME +" ORDER BY "+CTable.id + " DESC", null);
             if (cursor.moveToFirst()){
                 do{
                     int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(String.valueOf(CTable.id))));

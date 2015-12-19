@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hackathon.hacktbilisi.talkerhand">
+    // Required for communicating with the Myo device
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    // Required for sending usage data to Thalmic Labs
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
