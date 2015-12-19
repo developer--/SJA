@@ -1,37 +1,36 @@
 package hackathon.hacktbilisi.talkerhand;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hackathon.hacktbilisi.talkerhand.DB.CTable;
-import hackathon.hacktbilisi.talkerhand.DB.DBHelper;
 import hackathon.hacktbilisi.talkerhand.model.TalkHand;
 
 public class CombinationActivity extends AppCompatActivity implements View.OnClickListener {
@@ -47,6 +46,8 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
 
     @Bind(R.id.actions_container_layout_id) protected LinearLayout containerLayout;
     @Bind(R.id.icons_container_id)protected LinearLayoutCompat iconsContainer;
+
+    @Bind(R.id.main_layout_id)protected RelativeLayout mainLayout;
 
     private boolean updateStatus = false;
     TalkHand mTalkHand;
@@ -71,6 +72,9 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
             for (int i = 0; i < mTalkHand.getGesturesList().size(); i++) {
                 addToContainer(mTalkHand.getGesturesList().get(i));
             }
+        }else {
+            updateStatus = false;
+            word.setHintTextColor(getResources().getColor(R.color.hint_text_color));
         }
     }
 
@@ -135,6 +139,7 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
         spread_imgLayout.setOnClickListener(this);
 
         saveButton.setOnClickListener(this);
+        mainLayout.setOnClickListener(this);
     }
 
 
@@ -156,12 +161,23 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
                 addToContainer(R.drawable.right_black);
                 break;
 
+            case R.id.main_layout_id:
+                hideKeyBoard();
+                word.clearFocus();
+                break;
+
+
             case R.id.save_button_id:
                 save();
                 break;
         }
 
 
+    }
+
+    private void hideKeyBoard(){
+        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
     }
 
 
@@ -233,14 +249,20 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
             TalkHand mTalkHand = new TalkHand();
             ArrayList<Integer> idList = new ArrayList<>();
 
-            for (int i = 0; i < containerLayout.getChildCount(); i++) {
-                idList.add((Integer) containerLayout.getChildAt(i).getTag());
+            if (containerLayout.getChildCount() > 0 && word.getText().toString().length() > 0) {
+                for (int i = 0; i < containerLayout.getChildCount(); i++) {
+                    idList.add((Integer) containerLayout.getChildAt(i).getTag());
+                }
+                mTalkHand.setWord(word.getText().toString());
+                mTalkHand.setGesturesList(idList);
+
+                insert(mTalkHand);
+
+                //დავბრუნდეთ მთავარ გვერდზე
+                onBackPressed();
+            }else {
+                Toast.makeText(getBaseContext(),"კომბინაცია ცარიელია",Toast.LENGTH_SHORT).show();
             }
-
-            mTalkHand.setWord(word.getText().toString());
-            mTalkHand.setGesturesList(idList);
-
-            insert(mTalkHand);
         }
     }
 
@@ -252,12 +274,19 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
         values = new ContentValues();
         ArrayList<Integer> idList = new ArrayList<>();
 
-        for (int i = 0; i < containerLayout.getChildCount(); i++) {
-            idList.add((Integer) containerLayout.getChildAt(i).getTag());
+        if (containerLayout.getChildCount() > 0 && word.getText().toString().length() > 0) {
+
+            for (int i = 0; i < containerLayout.getChildCount(); i++) {
+                idList.add((Integer) containerLayout.getChildAt(i).getTag());
+            }
+            values.put(CTable.WORD, word.getText().toString());
+            values.put(CTable.ACTIONS, convertListToJson(idList));
+            MainActivity.db.update(CTable.TABLE_NAME, values, "id = ?", new String[]{String.valueOf(mTalkHand.getId())});
+
+            onBackPressed();
+        }else {
+            Toast.makeText(getBaseContext(),"კომბინაცია ცარიელია",Toast.LENGTH_SHORT).show();
         }
-        values.put(CTable.WORD, word.getText().toString());
-        values.put(CTable.ACTIONS, convertListToJson(idList));
-        MainActivity.db.update(CTable.TABLE_NAME, values, "id = ?", new String[]{String.valueOf(mTalkHand.getId())});
 
     }
 
@@ -273,7 +302,6 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
 
         MainActivity.db.insert(CTable.TABLE_NAME, null, values);
     }
-
 
     /**
      * გადავიყვანოთ ლისტი ჯსონ ობიექტად (სტრინგი)

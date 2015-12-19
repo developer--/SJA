@@ -1,6 +1,7 @@
 package hackathon.hacktbilisi.talkerhand.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,10 @@ public class TalkerAdapter extends BaseAdapter {
         return position;
     }
 
+
+
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View item;
@@ -54,9 +59,8 @@ public class TalkerAdapter extends BaseAdapter {
             holder = new MyHolder();
 
             LinearLayout gesturesContainer = (LinearLayout) item.findViewById(R.id.combinations_container_id);
-            TextView word = (TextView) item.findViewById(R.id.word_id);
 
-            holder.holderWord = word;
+            holder.holderWord = (TextView) item.findViewById(R.id.word_id);
             holder.holderLayout = gesturesContainer;
 
             item.setTag(holder);
@@ -68,6 +72,8 @@ public class TalkerAdapter extends BaseAdapter {
         TalkHand mTalkHand = (TalkHand) getItem(position);
 
         holder.holderWord.setText(mTalkHand.getWord());
+        setTypeFaces(holder.holderWord);
+
 
         for (int i = 0; i < mTalkHand.getGesturesList().size(); i++) {
             ImageView image = new ImageView(context);
@@ -78,14 +84,25 @@ public class TalkerAdapter extends BaseAdapter {
             holder.holderLayout.addView(image);
         }
 
-        System.out.println("123 "+mTalkHand.getGesturesList().size());
 
         return item;
     }
 
+
+
     private class MyHolder {
         TextView holderWord;
         LinearLayout holderLayout;
+    }
+
+
+
+    private void setTypeFaces(TextView textView){
+        Typeface font = Typeface.createFromAsset(
+                context.getAssets(),
+                "BPG_GEL_Excelsior.ttf");
+
+        textView.setTypeface(font);
     }
 
 }

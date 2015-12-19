@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.list_id)protected ListView listView;
     @Bind(R.id.toolbar)protected Toolbar toolbar;
 
+    @Bind(R.id.fab)protected FloatingActionButton fab;
+    @Bind(R.id.fab_talk_id)protected FloatingActionButton talk_fab;
+
     public static SQLiteDatabase db;
     public DBHelper dbHelper;
     private TalkerAdapter mAdapter;
@@ -46,22 +49,39 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        addFabIconClick();
+
+        talkFabIconClick();
+
+        itemClick();
+    }
+
+    private void addFabIconClick(){
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,CombinationActivity.class);
+                Intent intent = new Intent(MainActivity.this, CombinationActivity.class);
                 startActivity(intent);
                 MainActivity.this.overridePendingTransition(R.anim.right_in,
                         R.anim.left_out);
             }
         });
+    }
 
-        itemClick();
+    private void talkFabIconClick(){
+        talk_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,TalkActivity.class);
+                startActivity(intent);
+                MainActivity.this.overridePendingTransition(R.anim.right_in,
+                        R.anim.left_out);
+            }
+        });
     }
 
 
-    /**
+    /**x
      * itemze kliki
      */
     private void itemClick(){
