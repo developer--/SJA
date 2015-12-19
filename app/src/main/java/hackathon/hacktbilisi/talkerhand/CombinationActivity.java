@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -47,7 +48,8 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
     @Bind(R.id.actions_container_layout_id) protected LinearLayout containerLayout;
     @Bind(R.id.icons_container_id)protected LinearLayoutCompat iconsContainer;
 
-
+    private boolean updateStatus = false;
+    TalkHand mTalkHand;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,14 +64,16 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
         attachListeners();
 
         Intent intent = getIntent();
-        TalkHand mTalkHand = (TalkHand) intent.getSerializableExtra("HAND");
+        mTalkHand = (TalkHand) intent.getSerializableExtra("HAND");
         if (mTalkHand != null){
+            updateStatus = true;
             word.setText(mTalkHand.getWord());
             for (int i = 0; i < mTalkHand.getGesturesList().size(); i++) {
                 addToContainer(mTalkHand.getGesturesList().get(i));
             }
         }
     }
+
 
     private void initToolbar() {
         setSupportActionBar(toolbar);
@@ -80,8 +84,6 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
-
-
     private void setTypeFaces(){
         Typeface font = Typeface.createFromAsset(
                 getApplicationContext().getAssets(),
@@ -90,9 +92,6 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
         word.setTypeface(font);
         saveButton.setTypeface(font);
     }
-
-
-
 
     private Drawable getColoredArrow() {
         Drawable arrowDrawable = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
@@ -222,33 +221,57 @@ public class CombinationActivity extends AppCompatActivity implements View.OnCli
     };
 
 
+
+    private ContentValues values;
     /**
      * შევავსოთ მოდელის ობიექტი
      */
     private void save(){
+        if (updateStatus){
+            update(mTalkHand);
+        }else {
+            TalkHand mTalkHand = new TalkHand();
+            ArrayList<Integer> idList = new ArrayList<>();
 
-        TalkHand mTalkHand = new TalkHand();
+            for (int i = 0; i < containerLayout.getChildCount(); i++) {
+                idList.add((Integer) containerLayout.getChildAt(i).getTag());
+            }
+
+            mTalkHand.setWord(word.getText().toString());
+            mTalkHand.setGesturesList(idList);
+
+            insert(mTalkHand);
+        }
+    }
+
+    /**
+     * update into DataBase
+     * @param mTalkHand TalkHand
+     */
+    private void update(TalkHand mTalkHand){
+        values = new ContentValues();
         ArrayList<Integer> idList = new ArrayList<>();
 
         for (int i = 0; i < containerLayout.getChildCount(); i++) {
             idList.add((Integer) containerLayout.getChildAt(i).getTag());
         }
-
-        mTalkHand.setWord(word.getText().toString());
-        mTalkHand.setGesturesList(idList);
-
-        insert(mTalkHand);
+        values.put(CTable.WORD, word.getText().toString());
+        values.put(CTable.ACTIONS, convertListToJson(idList));
+        MainActivity.db.update(CTable.TABLE_NAME, values, "id = ?", new String[]{String.valueOf(mTalkHand.getId())});
 
     }
 
+    /**
+     * insert into Database
+     * @param mTalkHand TalkHand
+     */
     private void insert(TalkHand mTalkHand){
 
-        ContentValues values = new ContentValues();
+        values = new ContentValues();
         values.put(CTable.WORD, mTalkHand.getWord());
         values.put(CTable.ACTIONS, convertListToJson(mTalkHand.getGesturesList()));
 
-        long id =  MainActivity.db.insert(CTable.TABLE_NAME, null, values);
-        System.out.println(id);
+        MainActivity.db.insert(CTable.TABLE_NAME, null, values);
     }
 
 
