@@ -60,6 +60,7 @@ public class TalkerAdapter extends BaseAdapter {
 
             LinearLayout gesturesContainer = (LinearLayout) item.findViewById(R.id.combinations_container_id);
 
+
             holder.holderWord = (TextView) item.findViewById(R.id.word_id);
             holder.holderLayout = gesturesContainer;
 
@@ -77,6 +78,7 @@ public class TalkerAdapter extends BaseAdapter {
 
         try {
             for (int i = 0; i < mTalkHand.getGesturesList().size(); i++) {
+                System.out.print("1111 "+i +" "+ mTalkHand.getGesturesList().size()+" ");
                 ImageView image = new ImageView(context);
                 image.setBackgroundResource(mTalkHand.getGesturesList().get(i));
                 LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(70, 70);

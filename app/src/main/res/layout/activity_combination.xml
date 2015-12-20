@@ -139,7 +139,8 @@
                 android:id="@+id/save_button_id"
                 android:background="@drawable/button_style"
                 android:layout_gravity="bottom"
-                android:text="შენახვა"
+                android:text="Save"
+
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:layout_below="@id/img_actions_container_id"

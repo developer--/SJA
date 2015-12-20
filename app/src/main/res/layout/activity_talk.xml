@@ -22,7 +22,7 @@
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:background="#75ffffff"
+                android:background="#88ffffff"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mayo_image_container_height">
 
@@ -42,8 +42,8 @@
 
             <TextView
                 android:id="@+id/talk_help_text_view_id"
-                android:layout_marginTop="35dp"
-                android:textSize="25sp"
+                android:layout_marginTop="@dimen/talk_help_string_margin"
+                android:textSize="@dimen/talk_help_text_size"
                 android:gravity="center_horizontal"
                 android:textColor="@color/text_color"
                 android:layout_width="match_parent"
@@ -69,13 +69,13 @@
              <Button
                 android:layout_alignParentBottom="true"
                 android:id="@+id/talk_reset_button_id"
-                android:text="წაშლა"
+                android:text="Reset"
                 android:elevation="5dp"
                 android:textSize="20sp"
                 android:background="@drawable/button_style"
                 android:textColor="@color/white"
                 android:layout_width="match_parent"
-                android:layout_height="70dp" />
+                android:layout_height="@dimen/reset_button_height" />
 
         </RelativeLayout>
 

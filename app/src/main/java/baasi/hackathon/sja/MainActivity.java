@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
+        System.out.println("111 getData");
         return list;
     }
 
@@ -134,9 +134,11 @@ public class MainActivity extends AppCompatActivity {
             mAdapter = new TalkerAdapter(list,this);
             if (listView != null) {
                 listView.setAdapter(mAdapter);
+                System.out.println("111 setAdapter");
             }
+            mAdapter.notifyDataSetChanged();
         }catch (Exception e){
-            System.out.println("error");
+            System.out.println("111 error");
         }
     }
 }

@@ -54,7 +54,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.talk_container_layout)protected LinearLayout containerLayout;
     @Bind(R.id.talk_help_text_view_id)protected TextView helpTextView;
     @Bind(R.id.talk_reset_button_id)protected Button resetButton;
-    @Bind(R.id.order_img_id)protected ImageView orderImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -219,7 +219,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             // based on the pose we receive.
             switch (pose) {
                 case UNKNOWN:
-                    toast("UNKNOWN");
+//                    toast("UNKNOWN");
                     break;
                 case DOUBLE_TAP:
                     checkCombination();
@@ -241,20 +241,20 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 //                    }
                     break;
                 case FIST:
-                    toast("FIST");
+//                    toast("FIST");
                     addToContainer(R.drawable.mushti_black);
                     break;
                 case WAVE_IN:
                     addToContainer(R.drawable.left_black);
-                    toast("WAVE_IN");
+//                    toast("WAVE_IN");
                     break;
                 case WAVE_OUT:
                     addToContainer(R.drawable.right_black);
-                    toast("OUT");
+//                    toast("OUT");
                     break;
                 case FINGERS_SPREAD:
                     addToContainer(R.drawable.spread_black);
-                    toast("SPREAD");
+//                    toast("SPREAD");
                     break;
             }
 

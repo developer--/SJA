@@ -33,9 +33,9 @@ public class MyAnim {
             public void onAnimationEnd(Animator animation) {
                 fadeIn.start();
                 if (counter[0] % 2 ==0){
-                    ((TextView)fadeInTarget).setText("კომბინაციის დასრულება");
+                    ((TextView)fadeInTarget).setText("Double tap to push Myo actions");
                 }else {
-                    ((TextView)fadeInTarget).setText("კომბინაციის დასრულება");
+                    ((TextView)fadeInTarget).setText("Double tap to push Myo actions");
                 }
             }
 
